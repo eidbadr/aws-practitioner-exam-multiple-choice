@@ -1,0 +1,127 @@
+.quiz-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    margin: 40px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .quiz-title {
+    text-align: center;  /* Center the title */
+    font-size: 24px;     /* Adjust the font size */
+    font-weight: bold;   /* Make the title bold */
+    margin-bottom: 20px; /* Add some space below the title */
+    color: #333;         /* Set the text color */
+  }
+  
+  .skip-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .skip-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+  }
+  
+  .skip-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+  
+  .skip-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: #F44336;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .question-section {
+    margin: 20px 0;
+  }
+  
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: #444;
+    margin-bottom: 15px;
+  }
+  
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .choice-button {
+    padding: 12px 20px;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .choice-button:hover {
+    background-color: #e6f7ff;
+    border-color: #007bff;
+  }
+  
+  .correct {
+    background-color: #4CAF50 !important;
+    color: white !important;
+    border-color: #4CAF50 !important;
+  }
+  
+  .incorrect {
+    background-color: #F44336 !important;
+    color: white !important;
+    border-color: #F44336 !important;
+  }
+  
+  .next-button {
+    margin-top: 30px;
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .next-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .next-button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
