@@ -1,0 +1,13 @@
+1. What is AWS?
+Amazon Web Service
+Amazon Wide Server
+Amazing Web Storage
+Advanced Web Solution
+1
+
+2. Which AWS service is used for object storage?
+S3
+EC2
+RDS
+Lambda
+1
