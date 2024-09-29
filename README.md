@@ -1,4 +1,4 @@
-# AWS Practitioner Exam Multiple Choice APP: 1000 Questsions
+# AWS Practitioner Exam Multiple Choice APP: 1039 Questsions
 
 # Getting Started with Create React App
 
