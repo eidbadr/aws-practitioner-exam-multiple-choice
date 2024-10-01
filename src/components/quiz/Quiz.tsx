@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import './Quiz.css'; // Import the styles for Quiz component
 import NotificationBanner from '../notification/NotificationBanner'; // Import the NotificationBanner
+import subdomainConfig from '../../config/SubdomainConfig';
+import WelcomePage from '../welcomePage/WelcomePage';
 
 interface Question {
   sequenceNumber: string;
@@ -17,16 +19,24 @@ const Quiz: React.FC = () => {
   const [jumpQuestion, setJumpQuestion] = useState<string>(''); // State for input field to jump to a question
   const [error, setError] = useState<string>(''); // State to store any validation errors
   const [showBanner, setShowBanner] = useState<boolean>(false); // Show or hide the notification banner
+  const [title, setTitle] = useState<string>(''); // State for dynamic title
 
   useEffect(() => {
-    // Get the subdomain from the current URL
     const subdomain = getSubdomain();
 
-    // Determine the correct question file based on the subdomain
-    const questionFile = determineQuestionFile(subdomain);
+    // If the subdomain is www or empty, show the welcome page instead of the quiz
+    if (subdomain === 'www' || subdomain === '') {
+      return; // Stop execution if we're showing the welcome page
+    }
+
+    // Determine the correct question file and title based on the subdomain
+    const { file, title } = determineSubdomainConfig(subdomain);
+
+    // Set the dynamic title
+    setTitle(title);
 
     // Fetch questions from the appropriate file
-    fetch(questionFile)
+    fetch(file)
       .then((response) => response.text())
       .then((text) => {
         const parsedQuestions = parseQuestions(text);
@@ -41,17 +51,9 @@ const Quiz: React.FC = () => {
     return subdomain;
   };
 
-  // Function to determine which question file to load based on the subdomain
-  const determineQuestionFile = (subdomain: string): string => {
-    switch (subdomain) {
-      case 'clfc02-aws':
-        return '/clfc02-aws.txt';
-      case 'vocab-c1-de':
-        return '/vocab-c1-de.txt';
-      case 'www':
-      default:
-        return '/questions.txt'; // Default to questions.txt if subdomain is www or anything else
-    }
+  // Function to determine the question file and title based on the subdomain
+  const determineSubdomainConfig = (subdomain: string): { file: string; title: string } => {
+    return subdomainConfig[subdomain] || subdomainConfig['www']; // Fallback to www if subdomain is not found
   };
 
   // Function to parse the txt file content into questions with sequence numbers
@@ -119,6 +121,12 @@ const Quiz: React.FC = () => {
     setJumpQuestion(e.target.value);
   };
 
+  // If there's no subdomain or the subdomain is www, show the welcome page
+  const subdomain = getSubdomain();
+  if (subdomain === 'www' || subdomain === '' || subdomain === 'localhost') {
+    return <WelcomePage />; // Show the WelcomePage component if no subdomain or www
+  }
+
   if (questions.length === 0) return <div>Loading...</div>;
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -133,7 +141,7 @@ const Quiz: React.FC = () => {
       />
 
       {/* Centered Title */}
-      <h1 className="quiz-title">AWS Practitioner Certificate Training - CLF-C02</h1>
+      <h1 className="quiz-title">{title}</h1>
 
       <div className="skip-section">
         <input
