@@ -19,18 +19,44 @@ const Quiz: React.FC = () => {
   const [showBanner, setShowBanner] = useState<boolean>(false); // Show or hide the notification banner
 
   useEffect(() => {
-    // Fetch questions from the questions.txt file
-    fetch('questions.txt')
-      .then(response => response.text())
-      .then(text => {
+    // Get the subdomain from the current URL
+    const subdomain = getSubdomain();
+
+    // Determine the correct question file based on the subdomain
+    const questionFile = determineQuestionFile(subdomain);
+
+    // Fetch questions from the appropriate file
+    fetch(questionFile)
+      .then((response) => response.text())
+      .then((text) => {
         const parsedQuestions = parseQuestions(text);
         setQuestions(parsedQuestions);
       });
   }, []);
 
+  // Function to get the subdomain
+  const getSubdomain = (): string => {
+    const hostname = window.location.hostname;
+    const subdomain = hostname.split('.')[0];
+    return subdomain;
+  };
+
+  // Function to determine which question file to load based on the subdomain
+  const determineQuestionFile = (subdomain: string): string => {
+    switch (subdomain) {
+      case 'clfc02-aws':
+        return '/clfc02-aws.txt';
+      case 'vocab-c1-de':
+        return '/vocab-c1-de.txt';
+      case 'www':
+      default:
+        return '/questions.txt'; // Default to questions.txt if subdomain is www or anything else
+    }
+  };
+
   // Function to parse the txt file content into questions with sequence numbers
   const parseQuestions = (text: string): Question[] => {
-    const lines = text.split('\n').filter(line => line.trim() !== '');
+    const lines = text.split('\n').filter((line) => line.trim() !== '');
     const questionSet: Question[] = [];
 
     for (let i = 0; i < lines.length; i += 6) {
@@ -41,8 +67,13 @@ const Quiz: React.FC = () => {
       questionSet.push({
         sequenceNumber,
         question: questionText,
-        choices: [lines[i + 1].trim(), lines[i + 2].trim(), lines[i + 3].trim(), lines[i + 4].trim()],
-        correctAnswer: parseInt(lines[i + 5].trim(), 10) - 1 // 0-based index for correct answer
+        choices: [
+          lines[i + 1].trim(),
+          lines[i + 2].trim(),
+          lines[i + 3].trim(),
+          lines[i + 4].trim(),
+        ],
+        correctAnswer: parseInt(lines[i + 5].trim(), 10) - 1, // 0-based index for correct answer
       });
     }
 
@@ -110,9 +141,11 @@ const Quiz: React.FC = () => {
           placeholder="Enter question number"
           value={jumpQuestion}
           onChange={handleInputChange}
-          className={`skip-input`}
+          className="skip-input"
         />
-        <button onClick={handleSkipQuestion} className="skip-button">Skip to Question</button>
+        <button onClick={handleSkipQuestion} className="skip-button">
+          Skip to Question
+        </button>
       </div>
 
       <div className="question-section">
@@ -121,14 +154,15 @@ const Quiz: React.FC = () => {
           {currentQuestion.choices.map((choice, index) => (
             <button
               key={index}
-              className={`choice-button ${showCorrect
-                ? index === currentQuestion.correctAnswer
-                  ? 'correct'
-                  : index === selectedAnswer
+              className={`choice-button ${
+                showCorrect
+                  ? index === currentQuestion.correctAnswer
+                    ? 'correct'
+                    : index === selectedAnswer
                     ? 'incorrect'
                     : ''
-                : ''
-                }`}
+                  : ''
+              }`}
               onClick={() => handleAnswerClick(index)}
               disabled={showCorrect}
             >
